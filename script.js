@@ -3,8 +3,40 @@ document.addEventListener("DOMContentLoaded", () => {
     addRow(); // Start with one row
 });
 
-// --- DATA: PRESETS ---
+// --- DATA: PRESETS (Updated with BSAI) ---
 const presets = {
+    // --- BSAI (Artificial Intelligence) ---
+    "bsai_1": [
+        { name: "Functional English", credit: 3 },
+        { name: "Programming Fund. (Th)", credit: 3 },
+        { name: "Programming Fund. (Lab)", credit: 1 },
+        { name: "ICT (Theory)", credit: 3 },
+        { name: "ICT (Lab)", credit: 1 },
+        { name: "Islamiat", credit: 2 },
+        { name: "Calculus", credit: 3 }
+    ],
+    "bsai_2": [
+        { name: "OOP (Theory)", credit: 3 },
+        { name: "OOP (Lab)", credit: 1 },
+        { name: "Applied Physics", credit: 3 },
+        { name: "Ideology & Const. of Pak", credit: 2 },
+        { name: "Expository Writing", credit: 3 },
+        { name: "Linear Algebra", credit: 3 },
+        { name: "Intro to Business", credit: 2 }
+    ],
+    "bsai_3": [
+        { name: "Civics & Comm. Engage", credit: 2 },
+        { name: "Data Structures (Th)", credit: 3 },
+        { name: "Data Structures (Lab)", credit: 1 },
+        { name: "Digital Logic Design (Th)", credit: 2 },
+        { name: "Digital Logic Design (Lab)", credit: 1 },
+        { name: "Discrete Structures", credit: 3 },
+        { name: "Multivariable Calculus", credit: 3 },
+        { name: "Operating Systems (Th)", credit: 2 },
+        { name: "Operating Systems (Lab)", credit: 1 }
+    ],
+
+    // --- BSCS (Computer Science) ---
     "cs_1": [
         { name: "Intro to ICT", credit: 3 },
         { name: "Prog. Fundamentals", credit: 4 },
@@ -17,6 +49,8 @@ const presets = {
         { name: "Comm Skills", credit: 3 },
         { name: "Digital Logic", credit: 3 }
     ],
+
+    // --- BBA ---
     "bba_1": [
         { name: "Microeconomics", credit: 3 },
         { name: "Business Math", credit: 3 },
@@ -26,28 +60,53 @@ const presets = {
 
 // --- LOGIC: TABS ---
 function openTab(evt, tabName) {
-    // Hide all tab content
     document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
-    
-    // Remove active class from all buttons
     document.querySelectorAll(".tab-link").forEach(btn => btn.classList.remove("active"));
-    
-    // Show current tab and add active class
     document.getElementById(tabName).style.display = "block";
     if(evt) evt.currentTarget.classList.add("active");
+}
+
+// --- LOGIC: CUSTOM THRESHOLD TOGGLE ---
+function toggleCustomSettings() {
+    let model = document.getElementById("gradingModel").value;
+    let customBox = document.getElementById("customSettings");
+    if (model === "custom") {
+        customBox.classList.remove("hidden");
+    } else {
+        customBox.classList.add("hidden");
+    }
 }
 
 // --- LOGIC: GRADING ---
 function getGradeAndGPA(marks, model) {
     marks = parseFloat(marks);
+
+    // 1. CUSTOM MODEL
+    if (model === "custom") {
+        let minA = parseFloat(document.getElementById("customA").value) || 85;
+        let passing = parseFloat(document.getElementById("customPass").value) || 50;
+        
+        // Simple linear interpolation logic for custom
+        if (marks >= minA) return ["A", 4.0];
+        if (marks < passing) return ["F", 0.0];
+        
+        // If between Passing and A, estimate GPA
+        // Range = (Marks - Passing) / (MinA - Passing) * 2.0 + 2.0 (Starting at C=2.0)
+        // This is a rough estimator for custom user inputs
+        if (marks >= passing) return ["P", 2.0]; // Simplification for custom
+    } 
+
+    // 2. STRICT MODEL
     if (model === "strict") {
         if (marks >= 95) return ["A+", 4.0];
         if (marks >= 90) return ["A", 4.0];
         if (marks >= 85) return ["B+", 3.5];
         if (marks >= 80) return ["B", 3.0];
         return ["F", 0.0];
-    } else {
-        // STANDARD IMS
+    } 
+    
+    // 3. STANDARD IMS DEFAULT
+    else {
         if (marks >= 91) return ["A+", 4.0];
         else if (marks >= 87) return ["A", 4.0];
         else if (marks >= 80) return ["B+", 3.5];
@@ -92,7 +151,6 @@ function loadPreset() {
 }
 
 function autoCalc(input) {
-    // Optional: Real-time update for that row
     let row = input.parentNode.parentNode;
     let marks = input.value;
     let model = document.getElementById("gradingModel").value;
@@ -110,7 +168,7 @@ function calculateSGPA() {
     let model = document.getElementById("gradingModel").value;
     let error = false;
 
-    rows.forEach((row, index) => {
+    rows.forEach((row) => {
         let inputs = row.getElementsByTagName("input");
         let cr = parseFloat(inputs[1].value);
         let mk = parseFloat(inputs[2].value);
