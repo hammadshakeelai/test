@@ -3,59 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
     addRow(); // Start with one row
 });
 
-// --- DATA: PRESETS (Updated with BSAI) ---
+// --- PRESETS ---
 const presets = {
-    // --- BSAI (Artificial Intelligence) ---
-    "bsai_1": [
-        { name: "Functional English", credit: 3 },
-        { name: "Programming Fund. (Th)", credit: 3 },
-        { name: "Programming Fund. (Lab)", credit: 1 },
-        { name: "ICT (Theory)", credit: 3 },
-        { name: "ICT (Lab)", credit: 1 },
-        { name: "Islamiat", credit: 2 },
-        { name: "Calculus", credit: 3 }
-    ],
-    "bsai_2": [
-        { name: "OOP (Theory)", credit: 3 },
-        { name: "OOP (Lab)", credit: 1 },
-        { name: "Applied Physics", credit: 3 },
-        { name: "Ideology & Const. of Pak", credit: 2 },
-        { name: "Expository Writing", credit: 3 },
-        { name: "Linear Algebra", credit: 3 },
-        { name: "Intro to Business", credit: 2 }
-    ],
-    "bsai_3": [
-        { name: "Civics & Comm. Engage", credit: 2 },
-        { name: "Data Structures (Th)", credit: 3 },
-        { name: "Data Structures (Lab)", credit: 1 },
-        { name: "Digital Logic Design (Th)", credit: 2 },
-        { name: "Digital Logic Design (Lab)", credit: 1 },
-        { name: "Discrete Structures", credit: 3 },
-        { name: "Multivariable Calculus", credit: 3 },
-        { name: "Operating Systems (Th)", credit: 2 },
-        { name: "Operating Systems (Lab)", credit: 1 }
-    ],
+    // BSAI
+    "bsai_1": [ { name: "Functional English", credit: 3 }, { name: "Prog. Fund. (Th)", credit: 3 }, { name: "Prog. Fund. (Lab)", credit: 1 }, { name: "ICT (Theory)", credit: 3 }, { name: "ICT (Lab)", credit: 1 }, { name: "Islamiat", credit: 2 }, { name: "Calculus", credit: 3 } ],
+    "bsai_2": [ { name: "OOP (Theory)", credit: 3 }, { name: "OOP (Lab)", credit: 1 }, { name: "Applied Physics", credit: 3 }, { name: "Ideology & Const. of Pak", credit: 2 }, { name: "Expository Writing", credit: 3 }, { name: "Linear Algebra", credit: 3 }, { name: "Intro to Business", credit: 2 } ],
+    "bsai_3": [ { name: "Civics & Comm. Engage", credit: 2 }, { name: "Data Structures (Th)", credit: 3 }, { name: "Data Structures (Lab)", credit: 1 }, { name: "Digital Logic Design (Th)", credit: 2 }, { name: "Digital Logic Design (Lab)", credit: 1 }, { name: "Discrete Structures", credit: 3 }, { name: "Multivariable Calculus", credit: 3 }, { name: "Operating Systems (Th)", credit: 2 }, { name: "Operating Systems (Lab)", credit: 1 } ],
 
-    // --- BSCS (Computer Science) ---
-    "cs_1": [
-        { name: "Intro to ICT", credit: 3 },
-        { name: "Prog. Fundamentals", credit: 4 },
-        { name: "English Comp", credit: 3 },
-        { name: "Calculus", credit: 3 }
-    ],
-    "cs_2": [
-        { name: "OOP", credit: 4 },
-        { name: "Discrete Struct", credit: 3 },
-        { name: "Comm Skills", credit: 3 },
-        { name: "Digital Logic", credit: 3 }
-    ],
+    // BSCS
+    "cs_1": [ { name: "Intro to ICT", credit: 3 }, { name: "Prog. Fundamentals", credit: 4 }, { name: "English Comp", credit: 3 }, { name: "Calculus", credit: 3 } ],
+    "cs_2": [ { name: "OOP", credit: 4 }, { name: "Discrete Struct", credit: 3 }, { name: "Comm Skills", credit: 3 }, { name: "Digital Logic", credit: 3 } ],
 
-    // --- BBA ---
-    "bba_1": [
-        { name: "Microeconomics", credit: 3 },
-        { name: "Business Math", credit: 3 },
-        { name: "Intro to Business", credit: 3 }
-    ]
+    // BBA
+    "bba_1": [ { name: "Microeconomics", credit: 3 }, { name: "Business Math", credit: 3 }, { name: "Intro to Business", credit: 3 } ]
 };
 
 // --- LOGIC: TABS ---
@@ -66,37 +26,23 @@ function openTab(evt, tabName) {
     if(evt) evt.currentTarget.classList.add("active");
 }
 
-// --- LOGIC: CUSTOM THRESHOLD TOGGLE ---
 function toggleCustomSettings() {
     let model = document.getElementById("gradingModel").value;
     let customBox = document.getElementById("customSettings");
-    if (model === "custom") {
-        customBox.classList.remove("hidden");
-    } else {
-        customBox.classList.add("hidden");
-    }
+    if (model === "custom") customBox.classList.remove("hidden");
+    else customBox.classList.add("hidden");
 }
 
 // --- LOGIC: GRADING ---
 function getGradeAndGPA(marks, model) {
     marks = parseFloat(marks);
-
-    // 1. CUSTOM MODEL
     if (model === "custom") {
         let minA = parseFloat(document.getElementById("customA").value) || 85;
         let passing = parseFloat(document.getElementById("customPass").value) || 50;
-        
-        // Simple linear interpolation logic for custom
         if (marks >= minA) return ["A", 4.0];
         if (marks < passing) return ["F", 0.0];
-        
-        // If between Passing and A, estimate GPA
-        // Range = (Marks - Passing) / (MinA - Passing) * 2.0 + 2.0 (Starting at C=2.0)
-        // This is a rough estimator for custom user inputs
-        if (marks >= passing) return ["P", 2.0]; // Simplification for custom
+        if (marks >= passing) return ["P", 2.0];
     } 
-
-    // 2. STRICT MODEL
     if (model === "strict") {
         if (marks >= 95) return ["A+", 4.0];
         if (marks >= 90) return ["A", 4.0];
@@ -104,8 +50,6 @@ function getGradeAndGPA(marks, model) {
         if (marks >= 80) return ["B", 3.0];
         return ["F", 0.0];
     } 
-    
-    // 3. STANDARD IMS DEFAULT
     else {
         if (marks >= 91) return ["A+", 4.0];
         else if (marks >= 87) return ["A", 4.0];
@@ -175,7 +119,6 @@ function calculateSGPA() {
 
         if(isNaN(cr) || cr < 1) { inputs[1].style.border="2px solid red"; error=true; }
         else inputs[1].style.border="1px solid #ccc";
-
         if(isNaN(mk) || mk < 0 || mk > 100) { inputs[2].style.border="2px solid red"; error=true; }
         else inputs[2].style.border="1px solid #ccc";
 
@@ -189,13 +132,12 @@ function calculateSGPA() {
     });
 
     if(error) return;
-
     let final = totalCr > 0 ? (totalPts / totalCr).toFixed(2) : 0.00;
     document.getElementById("sgpa-result").innerHTML = `<h3>Semester GPA: ${final}</h3>`;
     saveToHistory(`SGPA: ${final}`, `${totalCr} Credits`);
 }
 
-// --- CALCULATION: CGPA ---
+// --- CALCULATION: CGPA (Old + New) ---
 function calculateCGPA() {
     let oldCGPA = parseFloat(document.getElementById("currentCGPA").value);
     let oldCr = parseFloat(document.getElementById("completedCredits").value);
@@ -211,18 +153,36 @@ function calculateCGPA() {
     let totalCredits = oldCr + newCr;
     let finalCGPA = (totalPts / totalCredits).toFixed(2);
 
-    document.getElementById("cgpa-result").innerHTML = `
-        <h3>New CGPA: ${finalCGPA}</h3>
-        <p>Total Credits: ${totalCredits}</p>
-    `;
+    document.getElementById("cgpa-result").innerHTML = `<h3>New CGPA: ${finalCGPA}</h3><p>Total Credits: ${totalCredits}</p>`;
     saveToHistory(`CGPA: ${finalCGPA}`, `Total: ${totalCredits} Credits`);
 }
 
-// --- HISTORY ---
-function toggleHistory() {
-    document.getElementById("historyPanel").classList.toggle("hidden");
+// --- NEW CALCULATION: AVERAGE OF 8 SEMESTERS ---
+function calculateAverage() {
+    let inputs = document.querySelectorAll(".sem-input");
+    let totalGPA = 0;
+    let count = 0;
+
+    inputs.forEach(input => {
+        let val = parseFloat(input.value);
+        if(!isNaN(val) && val > 0) {
+            totalGPA += val;
+            count++;
+        }
+    });
+
+    if(count === 0) {
+        document.getElementById("avg-result").innerHTML = "<p style='color:red'>Please enter at least one semester GPA.</p>";
+        return;
+    }
+
+    let average = (totalGPA / count).toFixed(2);
+    document.getElementById("avg-result").innerHTML = `<h3>Average GPA: ${average}</h3><p>Calculated from ${count} semester(s)</p>`;
+    saveToHistory(`Avg GPA: ${average}`, `${count} Sems`);
 }
 
+// --- HISTORY ---
+function toggleHistory() { document.getElementById("historyPanel").classList.toggle("hidden"); }
 function saveToHistory(title, detail) {
     let hist = JSON.parse(localStorage.getItem("imsHistory")) || [];
     hist.unshift({ title, detail, time: new Date().toLocaleTimeString() });
@@ -230,7 +190,6 @@ function saveToHistory(title, detail) {
     localStorage.setItem("imsHistory", JSON.stringify(hist));
     loadHistory();
 }
-
 function loadHistory() {
     let hist = JSON.parse(localStorage.getItem("imsHistory")) || [];
     let list = document.getElementById("historyList");
@@ -242,8 +201,4 @@ function loadHistory() {
         list.appendChild(li);
     });
 }
-
-function clearHistory() {
-    localStorage.removeItem("imsHistory");
-    loadHistory();
-}
+function clearHistory() { localStorage.removeItem("imsHistory"); loadHistory(); }
