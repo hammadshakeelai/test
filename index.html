@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMS GPA Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+  <header>
     <div class="header-left">
       <a href="https://imsciences.edu.pk/" target="_blank" title="Visit IMSciences Home">
         <img src="https://imsciences.edu.pk/wp-content/uploads/2024/10/logo-1-final.png" class="main-logo" alt="IMS Logo">
@@ -13,27 +22,14 @@
 
     <div class="header-right">
       <a href="https://admissions.imsciences.edu.pk/" target="_blank" class="nav-link">Admissions</a>
-
+      
       <a href="https://etc.imsciences.edu.pk/" target="_blank" class="portal-btn">
         <i class="fas fa-university"></i> IMS Portal
       </a>
 
-      <button onclick="toggleHistory()" class="icon-btn">
+      <button onclick="toggleHistory()" class="icon-btn" title="View History">
         <i class="fas fa-history"></i>
       </button>
-    </div>
-  </header>
-<body>
-
-  <header>
-    <div class="header-left">
-      <img src="https://imsciences.edu.pk/wp-content/uploads/2024/10/logo-1-final.png" class="main-logo" alt="IMS Logo">
-    </div>
-    <div class="header-center">
-      <h1>GPA Portal</h1>
-    </div>
-    <div class="header-right">
-      <button onclick="toggleHistory()" class="icon-btn"><i class="fas fa-history"></i> History</button>
     </div>
   </header>
 
@@ -47,11 +43,11 @@
     <section class="calculator-container">
       
       <div class="tabs">
-        <button class="tab-link active" onclick="openTab('sgpa')">1. Semester GPA</button>
-        <button class="tab-link" onclick="openTab('cgpa')">2. CGPA (Cumulative)</button>
+        <button class="tab-link active" onclick="openTab(event, 'sgpa')">1. Semester GPA</button>
+        <button class="tab-link" onclick="openTab(event, 'cgpa')">2. CGPA Calculator</button>
       </div>
 
-      <div id="sgpa" class="tab-content active">
+      <div id="sgpa" class="tab-content">
         <div class="controls">
           <div class="control-group">
             <label>Grading Model:</label>
@@ -66,6 +62,7 @@
               <option value="">-- Select Semester --</option>
               <option value="cs_1">BSCS - Semester 1</option>
               <option value="cs_2">BSCS - Semester 2</option>
+              <option value="bba_1">BBA - Semester 1</option>
             </select>
           </div>
         </div>
@@ -78,7 +75,7 @@
               <th>Marks</th>
               <th>Grd</th>
               <th>GPA</th>
-              <th>Del</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -86,51 +83,60 @@
         </table>
 
         <div class="buttons">
-          <button onclick="addRow()">+ Add</button>
+          <button onclick="addRow()">+ Add Subject</button>
           <button onclick="resetTable()" class="reset-btn">Reset</button>
           <button onclick="calculateSGPA()" class="calc-btn">Calculate SGPA</button>
         </div>
+
         <div id="sgpa-result" class="result-box"></div>
       </div>
 
       <div id="cgpa" class="tab-content" style="display:none;">
-        <h3>Calculate CGPA from Previous Semesters</h3>
-        <p class="info-text">Enter your current CGPA and total credit hours passed so far, then add your current semester's GPA.</p>
-        
-        <div class="cgpa-form">
-          <div class="input-group">
-            <label>Current CGPA (Before this semester):</label>
-            <input type="number" id="currentCGPA" placeholder="e.g. 3.45" step="0.01">
-          </div>
-
-          <div class="input-group">
-            <label>Credits Earned So Far:</label>
-            <input type="number" id="completedCredits" placeholder="e.g. 60">
-          </div>
-
-          <div class="divider"><span>+ PLUS +</span></div>
-
-          <div class="input-group">
-            <label>New Semester SGPA:</label>
-            <input type="number" id="newSGPA" placeholder="e.g. 3.8" step="0.01">
-          </div>
+        <div class="cgpa-container">
+          <h3>Calculate Final CGPA</h3>
+          <p class="info-text">Combine your previous history with your new semester result.</p>
           
-          <div class="input-group">
-            <label>New Semester Credits:</label>
-            <input type="number" id="newCredits" placeholder="e.g. 15">
+          <div class="cgpa-form">
+            <div class="input-group">
+              <label>Current CGPA (Old):</label>
+              <input type="number" id="currentCGPA" placeholder="e.g. 3.45" step="0.01">
+            </div>
+
+            <div class="input-group">
+              <label>Credits Passed (Old):</label>
+              <input type="number" id="completedCredits" placeholder="e.g. 60">
+            </div>
+
+            <div class="divider"><span>+ PLUS +</span></div>
+
+            <div class="input-group">
+              <label>New Semester SGPA:</label>
+              <input type="number" id="newSGPA" placeholder="e.g. 3.8" step="0.01">
+            </div>
+            
+            <div class="input-group">
+              <label>New Semester Credits:</label>
+              <input type="number" id="newCredits" placeholder="e.g. 15">
+            </div>
           </div>
-        </div>
 
-        <div class="buttons">
-          <button onclick="calculateCGPA()" class="calc-btn">Calculate Final CGPA</button>
-        </div>
+          <div class="buttons">
+            <button onclick="calculateCGPA()" class="calc-btn">Calculate Final CGPA</button>
+          </div>
 
-        <div id="cgpa-result" class="result-box"></div>
+          <div id="cgpa-result" class="result-box"></div>
+        </div>
       </div>
 
     </section>
   </main>
-  
+
+  <footer>
+    <p>© 2025 GPA Portal | Designed for IMSciences by 
+      <a href="https://www.linkedin.com/in/abubakar-sadiq-9abc7def6" target="_blank">Abu Bakar Sadiq</a>
+    </p>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
