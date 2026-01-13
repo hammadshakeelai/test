@@ -51,18 +51,40 @@
         <div class="controls">
           <div class="control-group">
             <label>Grading Model:</label>
-            <select id="gradingModel">
-              <option value="standard">Standard (IMS)</option>
+            <select id="gradingModel" onchange="toggleCustomSettings()">
+              <option value="standard">Standard (IMS Default)</option>
               <option value="strict">Strict (High Threshold)</option>
+              <option value="custom">Custom Thresholds...</option>
             </select>
           </div>
+
+          <div id="customSettings" class="custom-settings hidden">
+            <div class="small-input">
+              <label>Min Marks for A:</label>
+              <input type="number" id="customA" value="85">
+            </div>
+            <div class="small-input">
+              <label>Passing Marks:</label>
+              <input type="number" id="customPass" value="50">
+            </div>
+          </div>
+
           <div class="control-group">
             <label>Load Preset:</label>
             <select id="presetSelect" onchange="loadPreset()">
               <option value="">-- Select Semester --</option>
-              <option value="cs_1">BSCS - Semester 1</option>
-              <option value="cs_2">BSCS - Semester 2</option>
-              <option value="bba_1">BBA - Semester 1</option>
+              <optgroup label="BS Artificial Intelligence (BSAI)">
+                <option value="bsai_1">BSAI - Semester 1</option>
+                <option value="bsai_2">BSAI - Semester 2</option>
+                <option value="bsai_3">BSAI - Semester 3</option>
+              </optgroup>
+              <optgroup label="BS Computer Science (BSCS)">
+                <option value="cs_1">BSCS - Semester 1</option>
+                <option value="cs_2">BSCS - Semester 2</option>
+              </optgroup>
+              <optgroup label="Business Admin (BBA)">
+                <option value="bba_1">BBA - Semester 1</option>
+              </optgroup>
             </select>
           </div>
         </div>
