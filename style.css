@@ -48,9 +48,15 @@ main { flex: 1; display: flex; justify-content: center; padding: 30px 20px; posi
 .tab-content { animation: fadeIn 0.4s; }
 
 /* CONTROLS (Presets) */
-.controls { display: flex; justify-content: space-between; margin-bottom: 20px; background: #eef4ff; padding: 15px; border-radius: 8px; border: 1px solid #dcebf7; }
-.control-group { display: flex; flex-direction: column; text-align: left; width: 48%; }
+.controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 20px; background: #eef4ff; padding: 15px; border-radius: 8px; border: 1px solid #dcebf7; }
+.control-group { display: flex; flex-direction: column; text-align: left; flex: 1; min-width: 200px; }
 .control-group select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-top: 5px; }
+
+/* CUSTOM SETTINGS */
+.custom-settings { width: 100%; display: flex; gap: 15px; background: #fff; padding: 10px; margin-top: 10px; border: 1px dashed #2a5298; border-radius: 5px; }
+.custom-settings.hidden { display: none; }
+.small-input { display: flex; flex-direction: column; flex: 1; text-align: left; }
+.small-input input { padding: 5px; border: 1px solid #bbb; border-radius: 4px; }
 
 /* TABLE */
 table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
@@ -97,6 +103,6 @@ footer a { color: #f39c12; text-decoration: none; }
 @media (max-width: 768px) {
   header { flex-direction: column; gap: 10px; padding: 15px; }
   .header-right { width: 100%; justify-content: center; flex-wrap: wrap; }
-  .control-group { width: 100%; }
+  .controls { flex-direction: column; }
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
