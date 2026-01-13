@@ -1,131 +1,101 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body { background: #f4f7fb; color: #333; overflow-x: hidden; }
-
-/* HEADER */
+/* ===== HEADER ===== */
 header {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: linear-gradient(90deg, #1e3c72, #2a5298);
-  color: white; padding: 12px 30px; border-bottom: 4px solid #3498db;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2); position: relative; z-index: 10;
-}
-.header-left img { width: 70px; background: white; border-radius: 12px; padding: 6px; }
-.header-center h1 { font-size: 24px; }
-.icon-btn { background: transparent; border: 1px solid white; font-size: 14px; padding: 8px 15px; }
-
-/* MAIN LAYOUT */
-main { display: flex; justify-content: center; padding: 40px 20px; position: relative; }
-
-/* CONTROLS */
-.controls { display: flex; justify-content: space-between; margin-bottom: 20px; background: #eef4ff; padding: 15px; border-radius: 8px; border: 1px solid #dcebf7; }
-.control-group { display: flex; flex-direction: column; text-align: left; }
-.control-group select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-top: 5px; }
-
-.calculator { background: #fff; padding: 25px; border-radius: 14px; box-shadow: 0px 6px 15px rgba(0,0,0,0.1); width: 100%; max-width: 900px; text-align: center; }
-
-/* TABLE */
-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-table th, table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-table th { background: #2a5298; color: white; }
-table input { width: 95%; padding: 6px; border: 1px solid #ccc; border-radius: 8px; text-align: center; }
-
-/* DELETE BUTTON */
-.delete-btn { background: #e74c3c; padding: 5px 10px; font-size: 12px; margin: 0; }
-.delete-btn:hover { background: #c0392b; transform: scale(1.1); }
-
-/* BUTTONS */
-.buttons { display: flex; justify-content: center; gap: 15px; }
-button { padding: 10px 18px; border: none; border-radius: 8px; background: #2a5298; color: white; cursor: pointer; transition: 0.3s; }
-button:hover { transform: scale(1.05); }
-.reset-btn { background: #f39c12; }
-.reset-btn:hover { background: #d35400; }
-
-/* RESULT */
-#result { margin-top: 20px; padding: 15px; background: #eef4ff; border-left: 6px solid #2a5298; border-radius: 8px; text-align: left; font-weight: bold; }
-
-/* HISTORY SIDEBAR */
-.history-panel {
-  position: fixed; right: 0; top: 100px; bottom: 0; width: 300px;
-  background: white; border-left: 2px solid #ccc; padding: 20px;
-  box-shadow: -5px 0 15px rgba(0,0,0,0.1); transform: translateX(0);
-  transition: transform 0.3s ease-in-out; overflow-y: auto; z-index: 5;
-}
-.history-panel.hidden { transform: translateX(100%); }
-.history-item { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; }
-.history-item:hover { background: #eef4ff; }
-.danger-btn { background: #c0392b; width: 100%; margin-top: 10px; }
-
-/* FOOTER */
-footer { background: linear-gradient(90deg, #1e3c72, #2a5298); color: white; text-align: center; padding: 20px; margin-top: 40px; }
-footer a { color: #4cd137; text-decoration: none; font-weight: bold; }
-/* ... Keep previous styles ... */
-
-/* TABS STYLING */
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #ddd;
+  color: white;
+  padding: 10px 30px; /* Slightly reduced padding to fit buttons */
+  border-bottom: 4px solid #3498db;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 10;
 }
 
-.tab-link {
-  background: transparent;
-  color: #555;
-  border: none;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: 0.3s;
-}
-
-.tab-link:hover { color: #2a5298; }
-
-.tab-link.active {
-  color: #2a5298;
-  border-bottom: 3px solid #2a5298;
-}
-
-/* CGPA FORM STYLING */
-.cgpa-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 400px;
-  margin: 0 auto 20px auto;
-  text-align: left;
-}
-
-.input-group label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  color: #444;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-.divider {
-  text-align: center;
-  font-weight: bold;
-  color: #aaa;
-  margin: 5px 0;
-}
-
-/* RESULT BOXES */
-.result-box {
-  margin-top: 20px;
-  padding: 15px;
-  background: #eef4ff;
-  border-left: 6px solid #2a5298;
+/* LEFT: Logo */
+.header-left img {
+  width: 60px; /* Adjusted size */
+  background: white;
   border-radius: 8px;
-  text-align: left;
+  padding: 4px;
+  transition: transform 0.3s ease;
+  display: block; /* Removes extra space under image */
+}
+.header-left img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* CENTER: Title */
+.header-center h1 {
+  font-size: 22px;
   font-weight: bold;
-  min-height: 50px;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* RIGHT: Navigation & Buttons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Spacing between the links/buttons */
+}
+
+/* 1. Admissions Text Link */
+.nav-link {
+  color: #aed9e0;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+.nav-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* 2. IMS Portal Button (Orange/Gold to stand out) */
+.portal-btn {
+  background: #f39c12; /* Distinct color */
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 20px; /* Pill shape */
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  border: 1px solid #e67e22;
+}
+
+.portal-btn:hover {
+  background: #d35400;
+  transform: translateY(-2px);
+}
+
+/* 3. History Button (Existing) */
+.icon-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: white;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.icon-btn:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+/* Mobile Responsiveness for Header */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+  .header-right {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
