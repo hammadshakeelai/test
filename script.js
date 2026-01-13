@@ -1,20 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadHistory();
-    addRow(); // Start with one empty row
+    addRow(); // Start with one row
 });
 
-// --- 1. PRESETS & DATA ---
+// --- DATA: PRESETS ---
 const presets = {
     "cs_1": [
         { name: "Intro to ICT", credit: 3 },
-        { name: "Programming Fundamentals", credit: 4 },
+        { name: "Prog. Fundamentals", credit: 4 },
         { name: "English Comp", credit: 3 },
         { name: "Calculus", credit: 3 }
     ],
     "cs_2": [
         { name: "OOP", credit: 4 },
-        { name: "Discrete Structures", credit: 3 },
-        { name: "Comm Skills", credit: 3 }
+        { name: "Discrete Struct", credit: 3 },
+        { name: "Comm Skills", credit: 3 },
+        { name: "Digital Logic", credit: 3 }
     ],
     "bba_1": [
         { name: "Microeconomics", credit: 3 },
@@ -23,7 +24,20 @@ const presets = {
     ]
 };
 
-// --- 2. GRADING MODELS ---
+// --- LOGIC: TABS ---
+function openTab(evt, tabName) {
+    // Hide all tab content
+    document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+    
+    // Remove active class from all buttons
+    document.querySelectorAll(".tab-link").forEach(btn => btn.classList.remove("active"));
+    
+    // Show current tab and add active class
+    document.getElementById(tabName).style.display = "block";
+    if(evt) evt.currentTarget.classList.add("active");
+}
+
+// --- LOGIC: GRADING ---
 function getGradeAndGPA(marks, model) {
     marks = parseFloat(marks);
     if (model === "strict") {
@@ -32,16 +46,8 @@ function getGradeAndGPA(marks, model) {
         if (marks >= 85) return ["B+", 3.5];
         if (marks >= 80) return ["B", 3.0];
         return ["F", 0.0];
-    } 
-    else if (model === "linear") {
-        // Simple calculation: Marks / 20 - 1 (Roughly)
-        let gpa = (marks / 20) - 1; 
-        if(gpa > 4.0) gpa = 4.0;
-        if(gpa < 0) gpa = 0.0;
-        return [gpa.toFixed(1), gpa.toFixed(2)];
-    } 
-    else { 
-        // STANDARD (IMS Default)
+    } else {
+        // STANDARD IMS
         if (marks >= 91) return ["A+", 4.0];
         else if (marks >= 87) return ["A", 4.0];
         else if (marks >= 80) return ["B+", 3.5];
@@ -52,220 +58,134 @@ function getGradeAndGPA(marks, model) {
     }
 }
 
-// --- 3. TABLE MANAGEMENT ---
-
+// --- LOGIC: TABLE ---
 function addRow(name = "", credit = "", marks = "") {
-    let table = document.getElementById("courseTable").getElementsByTagName('tbody')[0];
-    let row = table.insertRow();
-
+    let tbody = document.getElementById("courseTable").getElementsByTagName('tbody')[0];
+    let row = tbody.insertRow();
     row.innerHTML = `
         <td><input type="text" placeholder="Subject" value="${name}"></td>
-        <td><input type="number" placeholder="Credit" min="1" max="4" value="${credit}"></td>
-        <td><input type="number" placeholder="Marks" min="0" max="100" value="${marks}" oninput="autoCalcRow(this)"></td>
-        <td class="grade-cell">-</td>
-        <td class="gpa-cell">-</td>
+        <td><input type="number" placeholder="Cr" min="1" max="6" value="${credit}"></td>
+        <td><input type="number" placeholder="%" min="0" max="100" value="${marks}" oninput="autoCalc(this)"></td>
+        <td class="grd">-</td>
+        <td class="gpa">-</td>
         <td><button class="delete-btn" onclick="deleteRow(this)"><i class="fas fa-trash"></i></button></td>
     `;
 }
 
-// Feature: Mistake Removing (Delete Row)
 function deleteRow(btn) {
     let row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
 }
 
-// Feature: Reset Table
 function resetTable() {
-    document.getElementById("courseTable").getElementsByTagName('tbody')[0].innerHTML = "";
-    document.getElementById("result").innerText = "";
-    addRow(); // Add one fresh row
+    document.querySelector("#courseTable tbody").innerHTML = "";
+    document.getElementById("sgpa-result").innerHTML = "";
+    addRow();
 }
 
-// Feature: Presets
 function loadPreset() {
-    let select = document.getElementById("presetSelect");
-    let key = select.value;
-    
+    let key = document.getElementById("presetSelect").value;
     if (key && presets[key]) {
-        // Clear current table
-        let tbody = document.getElementById("courseTable").getElementsByTagName('tbody')[0];
-        tbody.innerHTML = "";
-        
-        // Load preset rows
-        presets[key].forEach(subject => {
-            addRow(subject.name, subject.credit, "");
-        });
+        document.querySelector("#courseTable tbody").innerHTML = "";
+        presets[key].forEach(sub => addRow(sub.name, sub.credit, ""));
     }
 }
 
-// Optional: Auto-calculate row GPA as you type marks
-function autoCalcRow(input) {
+function autoCalc(input) {
+    // Optional: Real-time update for that row
     let row = input.parentNode.parentNode;
     let marks = input.value;
     let model = document.getElementById("gradingModel").value;
-    
     if(marks) {
-        let [grade, gpa] = getGradeAndGPA(marks, model);
-        row.querySelector('.grade-cell').innerText = grade;
-        row.querySelector('.gpa-cell').innerText = gpa;
+        let [g, p] = getGradeAndGPA(marks, model);
+        row.querySelector(".grd").innerText = g;
+        row.querySelector(".gpa").innerText = p;
     }
 }
 
-// --- 4. CALCULATION & HISTORY ---
-
-function calculateGPA() {
-    let tbody = document.getElementById("courseTable").getElementsByTagName('tbody')[0];
-    let rows = tbody.rows;
-    let totalPoints = 0;
-    let totalCredits = 0;
-    let errorMessages = []; 
+// --- CALCULATION: SGPA ---
+function calculateSGPA() {
+    let rows = document.querySelectorAll("#courseTable tbody tr");
+    let totalPts = 0, totalCr = 0;
     let model = document.getElementById("gradingModel").value;
+    let error = false;
 
-    for (let i = 0; i < rows.length; i++) {
-        let inputs = rows[i].getElementsByTagName("input");
-        let credit = parseFloat(inputs[1].value);
-        let marks = parseFloat(inputs[2].value);
+    rows.forEach((row, index) => {
+        let inputs = row.getElementsByTagName("input");
+        let cr = parseFloat(inputs[1].value);
+        let mk = parseFloat(inputs[2].value);
 
-        if (isNaN(credit) || credit < 1) {
-            inputs[1].style.border = "2px solid red";
-            errorMessages.push(`Row ${i+1}: Invalid Credit`);
-        } else {
-            inputs[1].style.border = "";
+        if(isNaN(cr) || cr < 1) { inputs[1].style.border="2px solid red"; error=true; }
+        else inputs[1].style.border="1px solid #ccc";
+
+        if(isNaN(mk) || mk < 0 || mk > 100) { inputs[2].style.border="2px solid red"; error=true; }
+        else inputs[2].style.border="1px solid #ccc";
+
+        if(!error && !isNaN(cr) && !isNaN(mk)) {
+            let [gr, gp] = getGradeAndGPA(mk, model);
+            row.querySelector(".grd").innerText = gr;
+            row.querySelector(".gpa").innerText = gp;
+            totalPts += (gp * cr);
+            totalCr += cr;
         }
+    });
 
-        if (isNaN(marks) || marks < 0 || marks > 100) {
-            inputs[2].style.border = "2px solid red";
-            errorMessages.push(`Row ${i+1}: Invalid Marks`);
-        } else {
-            inputs[2].style.border = "";
-        }
+    if(error) return;
 
-        if (errorMessages.length === 0) {
-            let [grade, gpa] = getGradeAndGPA(marks, model);
-            rows[i].querySelector('.grade-cell').innerText = grade;
-            rows[i].querySelector('.gpa-cell').innerText = gpa;
-            totalPoints += (gpa * credit);
-            totalCredits += credit;
-        }
-    }
-
-    if (errorMessages.length > 0) return;
-
-    let finalGPA = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0.00;
-    
-    // Display Result
-    let resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = `<h3>Semester GPA: ${finalGPA}</h3>`;
-
-    // Save to Local History
-    saveToHistory(finalGPA, totalCredits);
+    let final = totalCr > 0 ? (totalPts / totalCr).toFixed(2) : 0.00;
+    document.getElementById("sgpa-result").innerHTML = `<h3>Semester GPA: ${final}</h3>`;
+    saveToHistory(`SGPA: ${final}`, `${totalCr} Credits`);
 }
 
-// --- 5. LOCAL HISTORY STORAGE ---
+// --- CALCULATION: CGPA ---
+function calculateCGPA() {
+    let oldCGPA = parseFloat(document.getElementById("currentCGPA").value);
+    let oldCr = parseFloat(document.getElementById("completedCredits").value);
+    let newSGPA = parseFloat(document.getElementById("newSGPA").value);
+    let newCr = parseFloat(document.getElementById("newCredits").value);
 
+    if(isNaN(oldCGPA) || isNaN(oldCr) || isNaN(newSGPA) || isNaN(newCr)) {
+        document.getElementById("cgpa-result").innerHTML = "<p style='color:red'>Please fill all fields.</p>";
+        return;
+    }
+
+    let totalPts = (oldCGPA * oldCr) + (newSGPA * newCr);
+    let totalCredits = oldCr + newCr;
+    let finalCGPA = (totalPts / totalCredits).toFixed(2);
+
+    document.getElementById("cgpa-result").innerHTML = `
+        <h3>New CGPA: ${finalCGPA}</h3>
+        <p>Total Credits: ${totalCredits}</p>
+    `;
+    saveToHistory(`CGPA: ${finalCGPA}`, `Total: ${totalCredits} Credits`);
+}
+
+// --- HISTORY ---
 function toggleHistory() {
     document.getElementById("historyPanel").classList.toggle("hidden");
 }
 
-function saveToHistory(gpa, credits) {
-    let history = JSON.parse(localStorage.getItem("gpaHistory")) || [];
-    let date = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
-    
-    let entry = { gpa: gpa, credits: credits, date: date };
-    history.unshift(entry); // Add to top
-    
-    // Limit to last 10 entries
-    if(history.length > 10) history.pop();
-
-    localStorage.setItem("gpaHistory", JSON.stringify(history));
-    loadHistory(); // Refresh UI
+function saveToHistory(title, detail) {
+    let hist = JSON.parse(localStorage.getItem("imsHistory")) || [];
+    hist.unshift({ title, detail, time: new Date().toLocaleTimeString() });
+    if(hist.length > 10) hist.pop();
+    localStorage.setItem("imsHistory", JSON.stringify(hist));
+    loadHistory();
 }
 
 function loadHistory() {
-    let history = JSON.parse(localStorage.getItem("gpaHistory")) || [];
+    let hist = JSON.parse(localStorage.getItem("imsHistory")) || [];
     let list = document.getElementById("historyList");
     list.innerHTML = "";
-
-    history.forEach(item => {
+    hist.forEach(h => {
         let li = document.createElement("li");
         li.className = "history-item";
-        li.innerHTML = `<strong>GPA: ${item.gpa}</strong> <br> <small>${item.credits} Cr.Hrs | ${item.date}</small>`;
+        li.innerHTML = `<strong>${h.title}</strong><br><small>${h.detail} @ ${h.time}</small>`;
         list.appendChild(li);
     });
 }
 
 function clearHistory() {
-    if(confirm("Delete all history?")) {
-        localStorage.removeItem("gpaHistory");
-        loadHistory();
-    }
-}
-// ... Keep previous code (presets, grading models, addRow, etc.) ...
-
-// --- TAB SYSTEM ---
-function openTab(tabName) {
-    // Hide all tab content
-    document.querySelectorAll('.tab-content').forEach(div => {
-        div.style.display = 'none';
-    });
-    
-    // Remove active class from buttons
-    document.querySelectorAll('.tab-link').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // Show selected tab and activate button
-    document.getElementById(tabName).style.display = 'block';
-    // Note: In a real app, you'd target the specific button clicked to add 'active' class
-    event.currentTarget.classList.add('active');
-}
-
-// --- SGPA CALCULATION (Renamed from calculateGPA) ---
-function calculateSGPA() {
-    // ... [Use the code from the previous response here] ...
-    // Make sure to output to document.getElementById("sgpa-result")
-    
-    // Example snippet:
-    // document.getElementById("sgpa-result").innerHTML = `<h3>Semester GPA: ${finalGPA}</h3>`;
-}
-
-// --- NEW: CGPA CALCULATION ---
-function calculateCGPA() {
-    // 1. Get Values
-    let oldCGPA = parseFloat(document.getElementById("currentCGPA").value);
-    let oldCredits = parseFloat(document.getElementById("completedCredits").value);
-    let newSGPA = parseFloat(document.getElementById("newSGPA").value);
-    let newCredits = parseFloat(document.getElementById("newCredits").value);
-
-    // 2. Validation
-    let resultBox = document.getElementById("cgpa-result");
-    if (isNaN(oldCGPA) || isNaN(oldCredits) || isNaN(newSGPA) || isNaN(newCredits)) {
-        resultBox.innerHTML = "<span style='color:red'>Please fill all fields correctly.</span>";
-        return;
-    }
-
-    // 3. The Math (Falana Falana Formula)
-    // Formula: ((Old CGPA * Old Credits) + (New SGPA * New Credits)) / Total Credits
-    
-    let totalOldPoints = oldCGPA * oldCredits;
-    let totalNewPoints = newSGPA * newCredits;
-    let totalCredits = oldCredits + newCredits;
-    
-    let finalCGPA = (totalOldPoints + totalNewPoints) / totalCredits;
-    
-    // 4. Output
-    resultBox.innerHTML = `
-        <h3>New CGPA: ${finalCGPA.toFixed(2)}</h3>
-        <p>Total Credit Hours: ${totalCredits}</p>
-    `;
-
-    // Optional: Save to history
-    saveToHistory(finalCGPA.toFixed(2), totalCredits);
-}
-
-// Ensure default tab is open on load
-document.addEventListener("DOMContentLoaded", () => {
+    localStorage.removeItem("imsHistory");
     loadHistory();
-    addRow(); 
-    // Open default tab manually if needed, or rely on HTML "active" class
-});
+}
