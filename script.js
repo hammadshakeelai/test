@@ -200,3 +200,72 @@ function clearHistory() {
         loadHistory();
     }
 }
+// ... Keep previous code (presets, grading models, addRow, etc.) ...
+
+// --- TAB SYSTEM ---
+function openTab(tabName) {
+    // Hide all tab content
+    document.querySelectorAll('.tab-content').forEach(div => {
+        div.style.display = 'none';
+    });
+    
+    // Remove active class from buttons
+    document.querySelectorAll('.tab-link').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Show selected tab and activate button
+    document.getElementById(tabName).style.display = 'block';
+    // Note: In a real app, you'd target the specific button clicked to add 'active' class
+    event.currentTarget.classList.add('active');
+}
+
+// --- SGPA CALCULATION (Renamed from calculateGPA) ---
+function calculateSGPA() {
+    // ... [Use the code from the previous response here] ...
+    // Make sure to output to document.getElementById("sgpa-result")
+    
+    // Example snippet:
+    // document.getElementById("sgpa-result").innerHTML = `<h3>Semester GPA: ${finalGPA}</h3>`;
+}
+
+// --- NEW: CGPA CALCULATION ---
+function calculateCGPA() {
+    // 1. Get Values
+    let oldCGPA = parseFloat(document.getElementById("currentCGPA").value);
+    let oldCredits = parseFloat(document.getElementById("completedCredits").value);
+    let newSGPA = parseFloat(document.getElementById("newSGPA").value);
+    let newCredits = parseFloat(document.getElementById("newCredits").value);
+
+    // 2. Validation
+    let resultBox = document.getElementById("cgpa-result");
+    if (isNaN(oldCGPA) || isNaN(oldCredits) || isNaN(newSGPA) || isNaN(newCredits)) {
+        resultBox.innerHTML = "<span style='color:red'>Please fill all fields correctly.</span>";
+        return;
+    }
+
+    // 3. The Math (Falana Falana Formula)
+    // Formula: ((Old CGPA * Old Credits) + (New SGPA * New Credits)) / Total Credits
+    
+    let totalOldPoints = oldCGPA * oldCredits;
+    let totalNewPoints = newSGPA * newCredits;
+    let totalCredits = oldCredits + newCredits;
+    
+    let finalCGPA = (totalOldPoints + totalNewPoints) / totalCredits;
+    
+    // 4. Output
+    resultBox.innerHTML = `
+        <h3>New CGPA: ${finalCGPA.toFixed(2)}</h3>
+        <p>Total Credit Hours: ${totalCredits}</p>
+    `;
+
+    // Optional: Save to history
+    saveToHistory(finalCGPA.toFixed(2), totalCredits);
+}
+
+// Ensure default tab is open on load
+document.addEventListener("DOMContentLoaded", () => {
+    loadHistory();
+    addRow(); 
+    // Open default tab manually if needed, or rely on HTML "active" class
+});
