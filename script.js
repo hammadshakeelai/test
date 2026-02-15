@@ -4,18 +4,74 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- PRESETS ---
+
+// Inside script.js
+
 const presets = {
-    // BSAI
-    "bsai_1": [ { name: "Functional English", credit: 3 }, { name: "Prog. Fund. (Th)", credit: 3 }, { name: "Prog. Fund. (Lab)", credit: 1 }, { name: "ICT (Theory)", credit: 3 }, { name: "ICT (Lab)", credit: 1 }, { name: "Islamiat", credit: 2 }, { name: "Calculus", credit: 3 } ],
-    "bsai_2": [ { name: "OOP (Theory)", credit: 3 }, { name: "OOP (Lab)", credit: 1 }, { name: "Applied Physics", credit: 3 }, { name: "Ideology & Const. of Pak", credit: 2 }, { name: "Expository Writing", credit: 3 }, { name: "Linear Algebra", credit: 3 }, { name: "Intro to Business", credit: 2 } ],
-    "bsai_3": [ { name: "Civics & Comm. Engage", credit: 2 }, { name: "Data Structures (Th)", credit: 3 }, { name: "Data Structures (Lab)", credit: 1 }, { name: "Digital Logic Design (Th)", credit: 2 }, { name: "Digital Logic Design (Lab)", credit: 1 }, { name: "Discrete Structures", credit: 3 }, { name: "Multivariable Calculus", credit: 3 }, { name: "Operating Systems (Th)", credit: 2 }, { name: "Operating Systems (Lab)", credit: 1 } ],
+    // --- BSAI (Artificial Intelligence) ---
+    "bsai_1": [
+        { name: "Functional English", credit: 3 },
+        { name: "Programming Fund. (Th)", credit: 3 },
+        { name: "Programming Fund. (Lab)", credit: 1 },
+        { name: "ICT (Theory)", credit: 3 },
+        { name: "ICT (Lab)", credit: 1 },
+        { name: "Islamiat", credit: 2 },
+        { name: "Calculus", credit: 3 }
+    ],
+    "bsai_2": [
+        { name: "OOP (Theory)", credit: 3 },
+        { name: "OOP (Lab)", credit: 1 },
+        { name: "Applied Physics", credit: 3 },
+        { name: "Ideology & Const. of Pak", credit: 2 },
+        { name: "Expository Writing", credit: 3 },
+        { name: "Linear Algebra", credit: 3 },
+        { name: "Intro to Business", credit: 2 }
+    ],
+    "bsai_3": [
+        { name: "Civics & Comm. Engage", credit: 2 },
+        { name: "Data Structures (Th)", credit: 3 },
+        { name: "Data Structures (Lab)", credit: 1 },
+        { name: "Digital Logic Design (Th)", credit: 2 },
+        { name: "Digital Logic Design (Lab)", credit: 1 },
+        { name: "Discrete Structures", credit: 3 },
+        { name: "Multivariable Calculus", credit: 3 },
+        { name: "Operating Systems (Th)", credit: 2 },
+        { name: "Operating Systems (Lab)", credit: 1 }
+    ],
+    // --- NEW: BSAI Semester 4 ---
+    "bsai_4": [
+        { name: "Database Systems (Th)", credit: 3 },
+        { name: "Database Systems (Lab)", credit: 1 },
+        { name: "Software Engineering", credit: 3 },
+        { name: "Design & Analysis of Alg. (Th)", credit: 3 },
+        { name: "Design & Analysis of Alg. (Lab)", credit: 1 },
+        { name: "Artificial Intelligence (Th)", credit: 3 },
+        { name: "Artificial Intelligence (Lab)", credit: 1 },
+        { name: "Comp. Org. & Assembly (Th)", credit: 3 },
+        { name: "Comp. Org. & Assembly (Lab)", credit: 1 },
+        { name: "Probability & Statistics", credit: 3 }
+    ],
 
-    // BSCS
-    "cs_1": [ { name: "Intro to ICT", credit: 3 }, { name: "Prog. Fundamentals", credit: 4 }, { name: "English Comp", credit: 3 }, { name: "Calculus", credit: 3 } ],
-    "cs_2": [ { name: "OOP", credit: 4 }, { name: "Discrete Struct", credit: 3 }, { name: "Comm Skills", credit: 3 }, { name: "Digital Logic", credit: 3 } ],
+    // --- BSCS (Computer Science) ---
+    "cs_1": [
+        { name: "Intro to ICT", credit: 3 },
+        { name: "Prog. Fundamentals", credit: 4 },
+        { name: "English Comp", credit: 3 },
+        { name: "Calculus", credit: 3 }
+    ],
+    "cs_2": [
+        { name: "OOP", credit: 4 },
+        { name: "Discrete Struct", credit: 3 },
+        { name: "Comm Skills", credit: 3 },
+        { name: "Digital Logic", credit: 3 }
+    ],
 
-    // BBA
-    "bba_1": [ { name: "Microeconomics", credit: 3 }, { name: "Business Math", credit: 3 }, { name: "Intro to Business", credit: 3 } ]
+    // --- BBA ---
+    "bba_1": [
+        { name: "Microeconomics", credit: 3 },
+        { name: "Business Math", credit: 3 },
+        { name: "Intro to Business", credit: 3 }
+    ]
 };
 
 // --- LOGIC: TABS ---
