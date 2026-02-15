@@ -65,27 +65,29 @@
               <input type="number" id="customPass" value="50">
             </div>
           </div>
+            <div class="control-group">
+              <label>Load Preset:</label>
+              <select id="presetSelect" onchange="loadPreset()">
+                <option value="">-- Select Semester --</option>
+                
+                <optgroup label="BS Artificial Intelligence (BSAI)">
+                  <option value="bsai_1">BSAI - Semester 1</option>
+                  <option value="bsai_2">BSAI - Semester 2</option>
+                  <option value="bsai_3">BSAI - Semester 3</option>
+                  <option value="bsai_4">BSAI - Semester 4</option> 
+                </optgroup>
 
-          <div class="control-group">
-            <label>Load Preset:</label>
-            <select id="presetSelect" onchange="loadPreset()">
-              <option value="">-- Select Semester --</option>
-              <optgroup label="BS Artificial Intelligence (BSAI)">
-                <option value="bsai_1">BSAI - Semester 1</option>
-                <option value="bsai_2">BSAI - Semester 2</option>
-                <option value="bsai_3">BSAI - Semester 3</option>
-              </optgroup>
-              <optgroup label="BS Computer Science (BSCS)">
-                <option value="cs_1">BSCS - Semester 1</option>
-                <option value="cs_2">BSCS - Semester 2</option>
-              </optgroup>
-              <optgroup label="Business Admin (BBA)">
-                <option value="bba_1">BBA - Semester 1</option>
-              </optgroup>
-            </select>
+                <optgroup label="BS Computer Science (BSCS)">
+                  <option value="cs_1">BSCS - Semester 1</option>
+                  <option value="cs_2">BSCS - Semester 2</option>
+                </optgroup>
+
+                <optgroup label="Business Admin (BBA)">
+                  <option value="bba_1">BBA - Semester 1</option>
+                </optgroup>
+              </select>
+            </div>
           </div>
-        </div>
-
         <table id="courseTable">
           <thead>
             <tr>
