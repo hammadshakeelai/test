@@ -44,10 +44,9 @@ const presets = {
         { name: "Database Systems (Lab)", credit: 1 },
         { name: "Software Engineering", credit: 3 },
         { name: "Design & Analysis of Alg. (Th)", credit: 3 },
-        { name: "Design & Analysis of Alg. (Lab)", credit: 1 },
-        { name: "Artificial Intelligence (Th)", credit: 3 },
+        { name: "Artificial Intelligence (Th)", credit: 2 },
         { name: "Artificial Intelligence (Lab)", credit: 1 },
-        { name: "Comp. Org. & Assembly (Th)", credit: 3 },
+        { name: "Comp. Org. & Assembly (Th)", credit: 2 },
         { name: "Comp. Org. & Assembly (Lab)", credit: 1 },
         { name: "Probability & Statistics", credit: 3 }
     ],
