@@ -3,7 +3,7 @@
 
 **Web for private || public GPA calculations.** Fast, responsive, and equipped with presets for IMSciences students.
 
-🚀 **[Live Demo: Click Here to Use](https://hammadshakeelai.github.io/test/)**
+🚀 **[Live Demo: Click Here to Use]([https://hammadshakeelai.github.io/test/](https://hammadshakeelai.github.io/GPA-Calculator-Adanced-Project-IMS/))**
 
 ---
 
